@@ -7,8 +7,13 @@
 name: Flutter Release
 
 on:
-  # Disparo manual para controle do momento da publicação
-  workflow_dispatch:
+  # Executa quando houver merge na main (push com commit de merge)
+  push:
+    branches: [ main ]
+  # Executa quando um PR alvo da main for fechado; será filtrado para apenas merges
+  pull_request:
+    types: [ closed ]
+    branches: [ main ]
 
 # Permissões necessárias para criar tags/releases e enviar assets
 permissions:
@@ -21,6 +26,10 @@ concurrency:
 
 jobs:
   prepare:
+    # Garante que só roda quando for de fato um merge na main, evitando duplicidade
+    if: >
+      ${{ (github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true) ||
+          (github.event_name == 'push' && github.ref == 'refs/heads/main' && (contains(github.event.head_commit.message, 'Merge pull request') || contains(github.event.head_commit.message, 'Merge branch'))) }}
     name: Preparar versão e Release
     runs-on: ubuntu-latest
     outputs:
@@ -126,7 +135,7 @@ jobs:
 
       # Garante uma versão estável do Xcode para o build
       - name: Selecionar Xcode estável
-        uses: apple-actions/setup-xcode@v4
+        uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: latest-stable
 
@@ -156,6 +165,7 @@ jobs:
 
       # Empacota o Runner.app em um ZIP para facilitar o download na Release
       - name: Empacotar app iOS (.app) em ZIP
+        id: package_ios
         run: |
           APP_PATH="build/ios/iphoneos/Runner.app"
           if [ ! -d "$APP_PATH" ]; then
@@ -164,7 +174,7 @@ jobs:
           mkdir -p dist
           ZIP_PATH="dist/${{ github.event.repository.name }}-${{ needs.prepare.outputs.version }}-ios-app.zip"
           ditto -c -k --sequesterRsrc --keepParent "$APP_PATH" "$ZIP_PATH"
-          echo "ZIP_PATH=$ZIP_PATH" >> $GITHUB_ENV
+          echo "zip_path=$ZIP_PATH" >> $GITHUB_OUTPUT
 
       # Publica o ZIP do iOS como asset na Release existente
       - name: Anexar build iOS à Release
@@ -172,6 +182,6 @@ jobs:
         with:
           tag_name: ${{ needs.prepare.outputs.tag }}
           files: |
-            ${{ env.ZIP_PATH }}
+            ${{ steps.package_ios.outputs.zip_path }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
