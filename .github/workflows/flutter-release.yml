@@ -1,0 +1,177 @@
+# Workflow de Release para projeto Flutter
+# - Lê a versão a partir do pubspec.yaml
+# - Cria uma Release no GitHub com tag vX.Y.Z
+# - Faz build Android (APK) e iOS (sem assinatura)
+# - Publica os artefatos na Release
+
+name: Flutter Release
+
+on:
+  # Disparo manual para controle do momento da publicação
+  workflow_dispatch:
+
+# Permissões necessárias para criar tags/releases e enviar assets
+permissions:
+  contents: write
+
+# Evita corridas de publicação para a mesma ref
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    name: Preparar versão e Release
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.ver.outputs.version }}
+      tag: ${{ steps.ver.outputs.tag }}
+    steps:
+      # Baixa o código para ler a versão e ancorar a release no commit atual
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Extrai a versão (ex.: 1.2.3) do pubspec.yaml e monta a tag (ex.: v1.2.3)
+      - name: Extrair versão do pubspec.yaml
+        id: ver
+        shell: bash
+        run: |
+          RAW=$(grep -E '^version:' pubspec.yaml | sed 's/version:[[:space:]]*//' | tr -d '\r')
+          if [ -z "$RAW" ]; then
+            echo "Não foi possível encontrar a versão no pubspec.yaml"; exit 1
+          fi
+          VERSION="${RAW%%+*}"
+          echo "Versão encontrada: $VERSION"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
+
+      # Cria a Release vazia primeiro para evitar condição de corrida quando os builds enviarem os assets
+      - name: Criar Release (vazia) no GitHub
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.ver.outputs.tag }}
+          name: ${{ steps.ver.outputs.tag }}
+          body: |
+            Release gerada automaticamente para a versão ${{ steps.ver.outputs.version }}.
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  android:
+    name: Build Android (APK)
+    needs: prepare
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout para obter o código fonte
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Gradle/AGP recentes exigem JDK 17
+      - name: Configurar Java (JDK 17)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      # Instala Flutter estável com cache do SDK
+      - name: Instalar Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      # Cache das dependências do Pub para builds mais rápidos
+      - name: Cache do Pub
+        uses: actions/cache@v4
+        with:
+          path: ~/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
+
+      # Resolve as dependências do Dart/Flutter
+      - name: Restaurar dependências
+        run: flutter pub get
+
+      # Build de release do APK (sem splits para gerar um único app-release.apk)
+      - name: Build APK de release
+        run: flutter build apk --release
+
+      # Renomeia o APK com a versão para facilitar identificação na Release
+      - name: Renomear APK com versão
+        run: |
+          mkdir -p dist
+          cp build/app/outputs/flutter-apk/app-release.apk "dist/${{ github.event.repository.name }}-${{ needs.prepare.outputs.version }}.apk"
+
+      # Publica o APK como asset na Release existente
+      - name: Anexar APK à Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.prepare.outputs.tag }}
+          files: |
+            dist/${{ github.event.repository.name }}-${{ needs.prepare.outputs.version }}.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  ios:
+    name: Build iOS (sem assinatura)
+    needs: prepare
+    runs-on: macos-latest
+    steps:
+      # Checkout para obter o código fonte
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Garante uma versão estável do Xcode para o build
+      - name: Selecionar Xcode estável
+        uses: apple-actions/setup-xcode@v4
+        with:
+          xcode-version: latest-stable
+
+      # Instala Flutter estável com cache do SDK
+      - name: Instalar Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      # Cache das dependências do Pub
+      - name: Cache do Pub
+        uses: actions/cache@v4
+        with:
+          path: ~/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
+
+      # Resolve as dependências do Dart/Flutter
+      - name: Restaurar dependências
+        run: flutter pub get
+
+      # Build de release para iOS sem assinatura (gera Runner.app)
+      - name: Build iOS (release, sem assinatura)
+        run: flutter build ios --release --no-codesign
+
+      # Empacota o Runner.app em um ZIP para facilitar o download na Release
+      - name: Empacotar app iOS (.app) em ZIP
+        run: |
+          APP_PATH="build/ios/iphoneos/Runner.app"
+          if [ ! -d "$APP_PATH" ]; then
+            echo "App iOS não encontrado em $APP_PATH"; ls -la build/ios/iphoneos || true; exit 1
+          fi
+          mkdir -p dist
+          ZIP_PATH="dist/${{ github.event.repository.name }}-${{ needs.prepare.outputs.version }}-ios-app.zip"
+          ditto -c -k --sequesterRsrc --keepParent "$APP_PATH" "$ZIP_PATH"
+          echo "ZIP_PATH=$ZIP_PATH" >> $GITHUB_ENV
+
+      # Publica o ZIP do iOS como asset na Release existente
+      - name: Anexar build iOS à Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.prepare.outputs.tag }}
+          files: |
+            ${{ env.ZIP_PATH }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
