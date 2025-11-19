@@ -7,7 +7,12 @@ allprojects {
 
 rootProject.buildDir = "../build"
 subprojects {
-    project.buildDir = "${rootProject.buildDir}/${project.name}"
+    // Only override buildDir for subprojects that live under the root project directory.
+    // This avoids moving build directories for plugin projects located in the pub cache
+    // (which live outside the root project), preventing "different roots" errors.
+    if (project.projectDir.absolutePath.startsWith(rootProject.projectDir.absolutePath)) {
+        project.buildDir = "${rootProject.buildDir}/${project.name}"
+    }
 }
 subprojects {
     project.evaluationDependsOn(":app")
