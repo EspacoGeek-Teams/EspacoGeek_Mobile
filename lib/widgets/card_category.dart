@@ -16,7 +16,7 @@ class CardCategory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
         height: 252,
         width: null,
         child: GestureDetector(

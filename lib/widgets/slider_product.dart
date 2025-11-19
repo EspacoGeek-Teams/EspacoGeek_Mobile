@@ -7,9 +7,9 @@ class ProductCarousel extends StatefulWidget {
   final List<Map<String, String>> imgArray;
 
   const ProductCarousel({
-    Key? key,
+    super.key,
     required this.imgArray,
-  }) : super(key: key);
+  });
 
   @override
   _ProductCarouselState createState() => _ProductCarouselState();

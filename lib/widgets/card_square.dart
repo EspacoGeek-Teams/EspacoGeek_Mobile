@@ -7,8 +7,8 @@ class CardSquare extends StatelessWidget {
     this.cta = "",
     this.img = "",
     this.tap = defaultFunc,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String cta;
   final String img;

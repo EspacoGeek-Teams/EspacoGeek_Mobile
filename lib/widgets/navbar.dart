@@ -59,6 +59,7 @@ class _NavbarState extends State<Navbar> {
 
   ItemScrollController _scrollController = ItemScrollController();
 
+  @override
   void initState() {
     if (widget.tags.isNotEmpty) {
       activeTag = widget.tags[0];
@@ -116,10 +117,11 @@ class _NavbarState extends State<Navbar> {
                                       : Colors.white,
                                   size: 24.0),
                               onPressed: () {
-                                if (!widget.backButton)
+                                if (!widget.backButton) {
                                   Scaffold.of(context).openDrawer();
-                                else
+                                } else {
                                   Navigator.pop(context);
+                                }
                               }),
                           Padding(
                             padding: const EdgeInsets.only(left: 8.0),
@@ -254,7 +256,7 @@ class _NavbarState extends State<Navbar> {
                       ],
                     ),
                   if (tagsExist)
-                    Container(
+                    SizedBox(
                       height: 40,
                       child: ScrollablePositionedList.builder(
                         shrinkWrap: true,
@@ -271,8 +273,9 @@ class _NavbarState extends State<Navbar> {
                                         index == widget.tags.length - 1 ? 1 : 0,
                                     duration: Duration(milliseconds: 420),
                                     curve: Curves.easeIn);
-                                if (widget.getCurrentPage != null)
+                                if (widget.getCurrentPage != null) {
                                   widget.getCurrentPage!();
+                                }
                               }
                             },
                             child: Container(

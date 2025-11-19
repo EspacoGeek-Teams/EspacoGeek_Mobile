@@ -76,8 +76,9 @@ class MaterialDrawer extends StatelessWidget {
             DrawerTile(
                 icon: Icons.home,
                 onTap: () {
-                  if (currentPage != "Home")
+                  if (currentPage != "Home") {
                     Navigator.pushReplacementNamed(context, '/home');
+                  }
                 },
                 iconColor: Colors.black,
                 title: "Home",
@@ -85,8 +86,9 @@ class MaterialDrawer extends StatelessWidget {
             DrawerTile(
                 icon: Icons.face,
                 onTap: () {
-                  if (currentPage != "Woman")
+                  if (currentPage != "Woman") {
                     Navigator.pushReplacementNamed(context, '/woman');
+                  }
                 },
                 iconColor: Colors.black,
                 title: "Woman",
@@ -94,8 +96,9 @@ class MaterialDrawer extends StatelessWidget {
             DrawerTile(
                 icon: Icons.tag_faces,
                 onTap: () {
-                  if (currentPage != "Man")
+                  if (currentPage != "Man") {
                     Navigator.pushReplacementNamed(context, '/man');
+                  }
                 },
                 iconColor: Colors.black,
                 title: "Man",
@@ -103,8 +106,9 @@ class MaterialDrawer extends StatelessWidget {
             DrawerTile(
                 icon: Icons.child_friendly,
                 onTap: () {
-                  if (currentPage != "Kids")
+                  if (currentPage != "Kids") {
                     Navigator.pushReplacementNamed(context, '/kids');
+                  }
                 },
                 iconColor: Colors.black,
                 title: "Kids",
@@ -112,8 +116,9 @@ class MaterialDrawer extends StatelessWidget {
             DrawerTile(
                 icon: Icons.grain,
                 onTap: () {
-                  if (currentPage != "New Collection")
+                  if (currentPage != "New Collection") {
                     Navigator.pushReplacementNamed(context, '/newcollection');
+                  }
                 },
                 iconColor: Colors.black,
                 title: "New Collection",
@@ -121,8 +126,9 @@ class MaterialDrawer extends StatelessWidget {
             DrawerTile(
                 icon: Icons.settings_input_component,
                 onTap: () {
-                  if (currentPage != "Components")
+                  if (currentPage != "Components") {
                     Navigator.pushReplacementNamed(context, '/components');
+                  }
                 },
                 iconColor: Colors.black,
                 title: "Components",
@@ -130,8 +136,9 @@ class MaterialDrawer extends StatelessWidget {
             DrawerTile(
                 icon: Icons.account_circle,
                 onTap: () {
-                  if (currentPage != "Profile")
+                  if (currentPage != "Profile") {
                     Navigator.pushReplacementNamed(context, '/profile');
+                  }
                 },
                 iconColor: Colors.black,
                 title: "Profile",
@@ -139,8 +146,9 @@ class MaterialDrawer extends StatelessWidget {
             DrawerTile(
                 icon: Icons.settings,
                 onTap: () {
-                  if (currentPage != "Settings")
+                  if (currentPage != "Settings") {
                     Navigator.pushReplacementNamed(context, '/settings');
+                  }
                 },
                 iconColor: Colors.black,
                 title: "Settings",
@@ -148,8 +156,9 @@ class MaterialDrawer extends StatelessWidget {
             DrawerTile(
                 icon: Icons.exit_to_app,
                 onTap: () {
-                  if (currentPage != "Sign In")
+                  if (currentPage != "Sign In") {
                     Navigator.pushReplacementNamed(context, '/signin');
+                  }
                 },
                 iconColor: Colors.black,
                 title: "Sign In",
@@ -157,8 +166,9 @@ class MaterialDrawer extends StatelessWidget {
             DrawerTile(
                 icon: Icons.open_in_browser,
                 onTap: () {
-                  if (currentPage != "Sign Up")
+                  if (currentPage != "Sign Up") {
                     Navigator.pushReplacementNamed(context, '/signup');
+                  }
                 },
                 iconColor: Colors.black,
                 title: "Sign Up",
