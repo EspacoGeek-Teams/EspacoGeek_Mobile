@@ -4,10 +4,8 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:espacogeekmobile/l10n/app_localizations.dart';
 import 'core/graphql/client.dart';
+import 'core/routing/app_router.dart';
 import 'pages/home/home_page.dart';
-import 'pages/search/search_page.dart';
-import 'pages/search/search_route.dart';
-import 'pages/media/media_detail_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,23 +35,8 @@ class MyApp extends StatelessWidget {
           GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: AppLocalizations.supportedLocales,
-        routes: {
-          '/': (_) => const MyHomePage(),
-          SearchRoute.routeName: (_) => const SearchPage(),
-        },
-        onGenerateRoute: (settings) {
-          if (settings.name != null && settings.name!.startsWith('/media/')) {
-            final parts = settings.name!.split('/');
-            if (parts.length >= 4) {
-              final id = parts[2];
-              final slug = parts[3];
-              return MaterialPageRoute(
-                builder: (_) => MediaDetailPage(id: id, slug: slug),
-              );
-            }
-          }
-          return null;
-        },
+        routes: AppRouter.routes,
+        onGenerateRoute: AppRouter.onGenerateRoute,
       ),
     );
   }
