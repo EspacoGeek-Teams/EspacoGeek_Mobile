@@ -1,0 +1,28 @@
+{
+  "@@locale": "en",
+  "appTitle": "Espaço Geek",
+  "homeTitle": "Espaço Geek",
+  "helloWorld": "Hello, World!",
+  "randomIdea": "A random idea:",
+  "generateNewIdea": "Generate a new idea",
+  "search": "Search",
+  "searchTitle": "Search",
+  "searchHint": "Search media...",
+  "typeToSearch": "Type to search",
+  "loading": "Loading...",
+  "unknownError": "Unknown error",
+  "unknown": "Unknown",
+  "noResults": "No results",
+  "notFound": "Not found",
+  "failedToLoad": "Failed to load",
+  "season": "Season",
+  "episodes": "Episodes: {count}",
+  "@episodes": {
+    "placeholders": {
+      "count": {
+        "type": "String",
+        "example": "10"
+      }
+    }
+  }
+}
