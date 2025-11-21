@@ -5,7 +5,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:espacogeekmobile/l10n/app_localizations.dart';
 import 'core/graphql/client.dart';
 import 'core/routing/app_router.dart';
-import 'pages/home/home_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
