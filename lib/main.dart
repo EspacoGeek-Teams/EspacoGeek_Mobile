@@ -8,16 +8,11 @@ import 'core/graphql/client.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/cubit/theme_cubit.dart';
 import 'core/theme/cubit/theme_state.dart';
-import 'pages/home/home_page.dart';
-import 'pages/search/search_page.dart';
-import 'pages/search/search_route.dart';
-import 'pages/media/media_detail_page.dart';
 import 'core/routing/app_router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final client =
-      await GraphQLClientFactory.create(endpoint: AppConstants.apiEndpoint);
+  final client = await GraphQLClientFactory.create(endpoint: AppConstants.apiEndpoint);
   final themeCubit = ThemeCubit();
   runApp(MyApp(client: client, themeCubit: themeCubit));
 }
