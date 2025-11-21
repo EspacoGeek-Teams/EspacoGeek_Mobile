@@ -1,5 +1,0 @@
-{
-    "java.compile.nullAnalysis.mode": "disabled",
-    "svn.ignoreMissingSvnWarning": true,
-    "java.configuration.updateBuildConfiguration": "automatic"
-}
