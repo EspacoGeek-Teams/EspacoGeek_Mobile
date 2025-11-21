@@ -57,6 +57,24 @@ class AppLocalizationsPt extends AppLocalizations {
   String get season => 'Temporada';
 
   @override
+  String get theme => 'Tema';
+
+  /// No description provided for @lightTheme.
+  /// In pt, this message translates to:
+  /// **'Tema Claro'**
+  String get lightTheme => 'Tema Claro';
+
+  /// No description provided for @darkTheme.
+  /// In pt, this message translates to:
+  /// **'Tema Escuro'**
+  String get darkTheme => 'Tema Escuro';
+
+  /// No description provided for @systemTheme.
+  /// In pt, this message translates to:
+  /// **'Tema do Sistema'**
+  String get systemTheme => 'Tema do Sistema';
+
+  @override
   String episodes(String count) {
     return 'Episódios: $count';
   }

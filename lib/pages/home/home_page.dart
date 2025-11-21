@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:espacogeekmobile/l10n/app_localizations.dart';
+import 'package:espacogeekmobile/core/theme/widgets/theme_switcher_dialog.dart';
 import '../search/search_route.dart';
 import 'cubit/home_cubit.dart';
 import 'cubit/home_state.dart';
@@ -46,6 +47,14 @@ class MyHomePage extends StatelessWidget {
                   label: l10n.search,
                   onTap: () =>
                       Navigator.pushNamed(context, SearchRoute.routeName),
+                ),
+                SpeedDialChild(
+                  child: const Icon(Icons.brightness_6),
+                  label: l10n.theme,
+                  onTap: () => showDialog(
+                    context: context,
+                    builder: (_) => const ThemeSwitcherDialog(),
+                  ),
                 ),
               ],
             ),

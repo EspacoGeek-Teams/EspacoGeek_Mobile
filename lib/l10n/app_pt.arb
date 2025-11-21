@@ -24,5 +24,9 @@
         "example": "10"
       }
     }
-  }
+  },
+  "theme": "Tema",
+  "lightTheme": "Claro",
+  "darkTheme": "Escuro",
+  "systemTheme": "Sistema"
 }

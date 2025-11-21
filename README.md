@@ -1,92 +1,59 @@
 # espacogeekmobile
 
-A concise Flutter mobile app for Espaço Geek. This repository contains the mobile client implemented with Flutter and Dart.
+A Flutter mobile application for Espaço Geek.
 
-## Table of contents
+## Features
 
-- [Project](#project)
-- [Requirements](#requirements)
-- [Getting started](#getting-started)
-- [Run](#run)
-- [Build](#build)
-- [Testing](#testing)
-- [Localization](#localization)
-- [Project structure](#project-structure)
-- [Contributing](#contributing)
-- [License](#license)
+- 🌓 **Light and Dark Theme Support**: Switch between light, dark, or system theme
+- 🌍 **Internationalization**: Support for English and Portuguese
+- 🔍 **Media Search**: Search and browse media content
+- 📱 **Material Design 3**: Modern UI with Material Design 3
 
-## Project
+## Theme System
 
-This is the Espaço Geek mobile application. It provides the mobile UI, routing, localization, and platform-specific integration for Android and iOS.
+The app supports three theme modes:
+- **Light Theme**: Bright color scheme
+- **Dark Theme**: Dark color scheme  
+- **System Theme**: Automatically follows device settings
 
-## Requirements
+To change the theme:
+1. Tap the menu button (floating action button) on the home screen
+2. Select the theme icon
+3. Choose your preferred theme option
 
-- Flutter (stable channel) compatible with the project (see `pubspec.yaml`)
-- Android SDK (for Android builds)
-- Xcode (for iOS builds, macOS only)
+For more details, see [Theme System Documentation](docs/THEME_SYSTEM.md).
 
-## Getting started
+## Getting Started
 
-1. Clone the repository:
+### Prerequisites
 
-   git clone <repo-url>
+- Flutter SDK 3.1.1 or higher
+- Dart SDK
 
-2. Enter the project folder and fetch dependencies:
+### Installation
 
-   cd EspacoGeek_Mobile
-   flutter pub get
+1. Clone the repository
+2. Run `flutter pub get` to install dependencies
+3. Run `flutter pub run build_runner build` to generate code
+4. Run `flutter run` to start the app
 
-3. Configure platform-specific settings if needed (`android/local.properties`, signing configs, etc.).
+## Development
 
-## Run
+### Code Generation
 
-- Run on an attached Android device or emulator:
+This project uses code generation for:
+- Freezed (immutable state classes)
+- Localization
 
-  flutter run
+To regenerate code:
+```bash
+flutter pub run build_runner build --delete-conflicting-outputs
+```
 
-- Run on iOS (macOS with Xcode installed):
+### Localization
 
-  flutter run -d <device-id>
-
-## Build
-
-- Android APK:
-
-  flutter build apk --release
-
-- Android App Bundle:
-
-  flutter build appbundle --release
-
-- iOS (archive using Xcode):
-
-  flutter build ipa
-
-## Testing
-
-- Run unit and widget tests:
-
-  flutter test
-
-## Localization
-
-Localization files live in `l10n/`. The project already includes ARB and generated localization classes. If you change ARB files, run the generation step configured in the project (check `pubspec.yaml` and the `l10n` configuration).
-
-## Project structure (high level)
-
-- `lib/` — application source
-  - `main.dart` — app entry point
-  - `pages/` — UI pages
-  - `core/` — core services (routing, graphql, etc.)
-  - `constants/` — app constants and styles
-- `android/`, `ios/` — platform folders
-- `l10n/` — localization resources
-
-## Contributing
-
-Contributions are welcome. Open an issue or submit a pull request with a clear description of changes and testing steps.
-
-## License
-
-This project is licensed under the terms in the `LICENSE` file.
+To add a new language:
+1. Create a new `.arb` file in `lib/l10n/`
+2. Add translations
+3. Run code generation
 

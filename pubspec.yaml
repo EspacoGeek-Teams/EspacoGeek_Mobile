@@ -1,9 +1,9 @@
 name: espacogeekmobile
-description: A new Flutter project.
+description: Espaço-Geek-Mobile
 
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: 'none'
 
-version: 0.1.0
+version: 0.1.0+1
 
 environment:
   sdk: ^3.1.1
@@ -20,7 +20,7 @@ dependencies:
   crypto: ^3.0.7
   flutter_bloc: ^9.1.1
   equatable: ^2.0.5
-  intl: ^0.20.2
+  intl: any
   graphql_flutter: ^5.2.1
   flutter_speed_dial: ^7.0.0
   freezed_annotation: ^2.4.1

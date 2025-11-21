@@ -57,6 +57,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get season => 'Season';
 
   @override
+  String get theme => 'Theme';
+
+  /// No description provided for @lightTheme.
+  /// In en, this message translates to:
+  /// **'Light Theme'**
+  String get lightTheme => 'Light Theme';
+
+  /// No description provided for @darkTheme.
+  /// In en, this message translates to:
+  /// **'Dark Theme'**
+  String get darkTheme => 'Dark Theme';
+
+  /// No description provided for @systemTheme.
+  /// In en, this message translates to:
+  /// **'System Theme'**
+  String get systemTheme => 'System Theme';
+
+  @override
   String episodes(String count) {
     return 'Episodes: $count';
   }
